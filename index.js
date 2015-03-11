@@ -17,7 +17,11 @@ function promiseify(method, ctx) {
           return reject(err);
         }
         var arg = [].slice.call(arguments);
-        resolve.apply(this, arg.slice(1));
+        if (arg.length === 2) {
+          resolve.call(this, arg[1]);
+        } else {
+          resolve.call(this, arg.slice(1));
+        }
       });
 
       method.apply(ctx, args);
@@ -26,4 +30,4 @@ function promiseify(method, ctx) {
   };
 }
 
-module.export = promiseify;
+module.exports = promiseify;
