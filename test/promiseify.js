@@ -45,4 +45,17 @@ describe('promiseify', function() {
     .catch(done);
     clock.tick(1000);
   });
+
+
+  it('1 is not a function', function(done) {
+    var doSomeP = promiseify(1);
+    doSomeP('hello').then(function(arg) {
+      done();
+    }).catch(function (err) {
+      err.should.be.an.instanceof(TypeError);
+      err.message.should.be.equal('1 is not a function');
+      done();
+    });
+    clock.tick(1000);
+  });
 });
