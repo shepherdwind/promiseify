@@ -24,8 +24,11 @@ function promiseify(method, ctx) {
         }
       });
 
-      method.apply(ctx, args);
-
+      try {
+        method.apply(ctx, args);
+      } catch (err) {
+        reject(new TypeError(String(method) + ' is not a function'));
+      }
     });
   };
 }
