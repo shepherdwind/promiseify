@@ -43,4 +43,29 @@ function promiseify(method, ctx) {
   };
 }
 
+/**
+ * promiseify all
+ * @param  {object} o the target object
+ * @return {object}   same to target object
+ *
+ * @example
+ *   var fs = promiseify.all(require('fs'));
+ *   fs.readFileAsync('file.txt', 'utf8')
+ *     .then(function(s){ console.log(s); });
+ *
+ *   var Connection = require('mysql/lib/Connection');
+ *   promiseify.all(Connection);
+ *   // conn.connectAsync / conn.queryAsync / conn.endAsync available now
+ */
+promiseify.all = function(o) {
+  Object.keys(o)
+    .filter(function(m) {
+      return typeof o[m] === 'function';
+    })
+    .forEach(function(m) {
+      o[m + 'Async'] = promiseify(o[m]);
+    });
+  return o;
+};
+
 module.exports = promiseify;
