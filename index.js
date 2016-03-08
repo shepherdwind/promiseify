@@ -54,7 +54,7 @@ function promiseify(method, ctx) {
  *     .then(function(s){ console.log(s); });
  *
  *   var Connection = require('mysql/lib/Connection');
- *   promiseify.all(Connection);
+ *   promiseify.all(Connection.prototype);
  *   // conn.connectAsync / conn.queryAsync / conn.endAsync available now
  */
 promiseify.all = function(o) {
