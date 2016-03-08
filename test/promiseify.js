@@ -58,4 +58,19 @@ describe('promiseify', function() {
     });
     clock.tick(1000);
   });
+
+  it('promiseify.all should work', function(done) {
+    var fs = promiseify.all(require('fs'));
+
+    // check
+    fs.readFileAsync.should.be.ok;
+
+    // call
+    fs.readFileAsync(__filename, 'utf8')
+      .then(function(s) {
+        s.should.be.match(/promiseify/);
+        done();
+      })
+      .catch(done);
+  });
 });
