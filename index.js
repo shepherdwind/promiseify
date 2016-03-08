@@ -7,9 +7,19 @@
  */
 function promiseify(method, ctx) {
 
+  // check first
+  if (typeof method !== 'function') {
+    throw new TypeError(String(method) + ' is not a function');
+  }
+
   return function() {
 
+    // runtime args
     var args = [].slice.call(arguments);
+
+    // runtime this
+    ctx = ctx || this;
+
     return new Promise(function(resolve, reject) {
 
       args.push(function(err) {
@@ -27,7 +37,7 @@ function promiseify(method, ctx) {
       try {
         method.apply(ctx, args);
       } catch (err) {
-        reject(new TypeError(String(method) + ' is not a function'));
+        reject(err);
       }
     });
   };

@@ -48,14 +48,58 @@ describe('promiseify', function() {
 
 
   it('1 is not a function', function(done) {
-    var doSomeP = promiseify(1);
-    doSomeP('hello').then(function(arg) {
-      done();
-    }).catch(function (err) {
+    try {
+      var doSomeP = promiseify(1);
+    } catch(err) {
       err.should.be.an.instanceof(TypeError);
       err.message.should.be.equal('1 is not a function');
       done();
-    });
+    }
+    clock.tick(1000);
+  });
+
+  it('should keep context when provided', function(done) {
+    var foo = { age: 18 };
+    var fn = function(cb) {
+      var self = this;
+      setTimeout(function() {
+        cb(null, self.age + 1);
+      }, 1000);
+    };
+
+    // provide an context
+    promiseify(fn, foo)()
+      .then(function(num) {
+        num.should.be.equal(foo.age + 1);
+        done();
+      })
+      .catch(done);
+
+    clock.tick(1000);
+  });
+
+  it('should get context from runtime `this`', function(done) {
+    var foo = { 
+      age: 18,
+      fn: function(cb) {
+        var self = this;
+        setTimeout(function() {
+          cb(null, self.age + 1);
+        }, 1000);
+      }
+    };
+
+    // promisify an async version
+    foo.fnAsync = promiseify(foo.fn);
+
+    // auto context
+    foo.fnAsync()
+      .then(function(num) {
+        num.should.be.equal(foo.age + 1);
+        done();
+      })
+      .catch(done);
+
     clock.tick(1000);
   });
 });
