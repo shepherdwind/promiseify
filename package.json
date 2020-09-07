@@ -1,6 +1,6 @@
 {
   "name": "promiseify",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "callback method to promiseify method",
   "main": "index.js",
   "scripts": {
