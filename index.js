@@ -68,4 +68,6 @@ promiseify.all = function(o) {
   return o;
 };
 
+Object.defineProperty(promiseify, "__esModule", { value: true });
+promiseify.default = promiseify;
 module.exports = promiseify;
